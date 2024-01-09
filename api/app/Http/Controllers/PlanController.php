@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Plan;
+use App\Domain\Models\Plan;
 
 class PlanController extends Controller
 {
