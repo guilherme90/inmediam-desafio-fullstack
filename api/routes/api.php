@@ -25,5 +25,5 @@ Route::get('/', function () {
 });
 
 Route::apiResource('plans', PlanController::class, ['only' => 'index']);
-Route::apiResource('plans/hire-plan', HirePlanController::class, ['only' => 'index']);
+Route::apiResource('plans/hire-plan', HirePlanController::class, ['only' => 'store']);
 Route::apiSingleton('user', UserController::class, ['only' => 'show']);
