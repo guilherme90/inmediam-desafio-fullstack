@@ -3,30 +3,61 @@
 namespace App\Domain\UseCases;
 
 use App\Domain\Enums\PaymentStatusEnum;
-use App\Domain\Enums\TypeInvoiceEnum;
-use App\Domain\Enums\TypePaymentEnum;
 use App\Domain\Models\Payment;
+use App\Domain\Models\Contract;
+use App\Domain\Models\Plan;
+use App\Traits\CalculateBalanceTrait;
 
 class PaymentUseCase
 {
+    use CalculateBalanceTrait;
+
     public function pay(
         int $contractId,
-        float $priceContracted,
+        Contract $contract,
+        Plan $plan,
         float $pricePaid,
-        TypeInvoiceEnum $typeInvoice,
-        TypePaymentEnum $typePayment
-    ): int
+        string $typeInvoice,
+        string $typePayment
+    ): void
     {
-        $payment = Payment::create([
+        $planPrice = $plan['price'];
+        $outstandingBalance = $this->getOutstandingBalance($planPrice);
+
+        if ($planPrice > $contract['price']) {
+            Payment::create([
+                'contract_id' => $contractId,
+                'price_contracted' => $planPrice,
+                'balance' => -$outstandingBalance,
+                'price_paid' => 0,
+                'type_invoice' => $typeInvoice,
+                'type_payment' => null,
+                'status' => PaymentStatusEnum::PENDING
+            ]);
+            return;
+        }
+
+        if ($planPrice < $contract['price']) {
+            Payment::create([
+                'contract_id' => $contractId,
+                'price_contracted' => $planPrice,
+                'balance' => $outstandingBalance,
+                'price_paid' => $planPrice,
+                'type_invoice' => 'credit',
+                'type_payment' => $typePayment,
+                'status' => PaymentStatusEnum::PAID
+            ]);
+            return;
+        }
+
+        Payment::create([
             'contract_id' => $contractId,
-            'price_contracted' => $priceContracted,
+            'price_contracted' => $planPrice,
             'balance' => 0,
             'price_paid' => $pricePaid,
-            'type_invoice' => $typeInvoice->value,
-            'type_payment' => $typePayment->value,
+            'type_invoice' => $typeInvoice,
+            'type_payment' => $typePayment,
             'status' => PaymentStatusEnum::PAID
         ]);
-
-        return 1;
     }
 }

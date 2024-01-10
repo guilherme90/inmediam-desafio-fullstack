@@ -26,4 +26,9 @@ class ContractUseCase
 
         return $contract['id'];
     }
+
+    public function getActiveContract(int $userId): Contract
+    {
+        return Contract::where('user_id', '=', $userId)->where('active', '=', true)->first();
+    }
 }

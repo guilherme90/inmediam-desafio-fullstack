@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Domain\UseCases\ContractUseCase;
+use App\Domain\UseCases\HirePlanUseCase;
 use App\Domain\UseCases\PaymentUseCase;
 use App\Domain\UseCases\PlanUseCase;
 use App\Http\Controllers\Requests\HirePlanRequest;
@@ -12,9 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class HirePlanController extends Controller
 {
     public function __construct(
-        private readonly ContractUseCase $contractUseCase,
-        private readonly PaymentUseCase $paymentUseCase,
-        private readonly PlanUseCase $planUseCase
+        private readonly HirePlanUseCase $hirePlanUseCase
     )
     {}
 
@@ -22,12 +21,16 @@ class HirePlanController extends Controller
     {
         try {
             $input = $request->validated();
-            $plan = $this->planUseCase->getById($input['plan_id']);
 
-            $contractId = $this->contractUseCase->createContract($input['user_id'], $plan);
-            // $this->paymentUseCase->pay($input);
+            $this->hirePlanUseCase->process(
+                $input['user_id'],
+                $input['plan_id'],
+                $input['price'],
+                $input['type_invoice'],
+                $input['type_payment']
+            );
 
-            return \response()->json(['message' => 'Plano contratado com sucesso', 'id' => $contractId]);
+            return \response()->json(['message' => 'Plano contratado com sucesso']);
         } catch (HttpException $e) {
             return \response()->json([
                 'message' => $e->getMessage()

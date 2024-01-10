@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('balance', 13, 2, true);
             $table->decimal('price_paid', 13, 2);
             $table->enum('type_invoice', ['credit', 'debit']);
-            $table->enum('type_payment', ['pix', 'credit_card', 'billet']);
+            $table->enum('type_payment', ['pix', 'credit_card', 'billet'])->nullable();
             $table->enum('status', ['pending', 'paid']);
             $table->timestamps();
         });

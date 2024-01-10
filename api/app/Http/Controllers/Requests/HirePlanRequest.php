@@ -27,6 +27,7 @@ class HirePlanRequest extends FormRequest
         return [
             'user_id' => ['required', 'present', 'min:1'],
             'plan_id' => ['required', 'present', 'min:1' ],
+            'price' => ['required', 'present'],
             'type_invoice' => ['required', 'present', ],
             'type_payment' => ['required', 'present', ]
         ];
@@ -37,6 +38,7 @@ class HirePlanRequest extends FormRequest
         return [
             'user_id.required' => 'Informe o usuário contratante',
             'plan_id.required' => 'Informe o plano',
+            'price.required' => 'Informe o valor',
             'type_invoice.required' => 'Informe o tipo de transação, crédito ou débito',
             'type_payment.required' => 'Informe qual o tipo de pagamento'
         ];
