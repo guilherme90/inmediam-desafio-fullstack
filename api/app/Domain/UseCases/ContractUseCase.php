@@ -7,7 +7,7 @@ use App\Domain\Models\Plan;
 
 class ContractUseCase
 {
-    public function createContract(int $userId, Plan $plan): int
+    public function createContract(int $userId, Plan $plan): Contract
     {
         $hasActiveContract = Contract::isActive($userId)->first();
 
@@ -18,16 +18,14 @@ class ContractUseCase
             $hasActiveContract->save();
         }
 
-        $contract = Contract::create([
+        return Contract::create([
             'user_id' => $userId,
             'plan_id' => $plan['id'],
             'price' => $plan['price']
         ]);
-
-        return $contract['id'];
     }
 
-    public function getActiveContract(int $userId): Contract
+    public function getActiveContract(int $userId): Contract | null
     {
         return Contract::where('user_id', '=', $userId)->where('active', '=', true)->first();
     }

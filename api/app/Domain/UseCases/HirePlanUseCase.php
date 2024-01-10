@@ -19,13 +19,13 @@ class HirePlanUseCase
         string $typePayment
     ): void
     {
-        $contract = $this->contractUseCase->getActiveContract($userId);
+        $activeContract = $this->contractUseCase->getActiveContract($userId);
         $plan = $this->planUseCase->getById($planId);
 
-        $contractId = $this->contractUseCase->createContract($userId, $plan);
+        $contract = $this->contractUseCase->createContract($userId, $plan);
         $this->paymentUseCase->pay(
-            $contractId,
-            $contract,
+            $contract['id'],
+            $activeContract,
             $plan,
             $price,
             $typeInvoice,

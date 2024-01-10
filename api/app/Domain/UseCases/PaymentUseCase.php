@@ -14,7 +14,7 @@ class PaymentUseCase
 
     public function pay(
         int $contractId,
-        Contract $contract,
+        ?Contract $activeContract,
         Plan $plan,
         float $pricePaid,
         string $typeInvoice,
@@ -22,9 +22,23 @@ class PaymentUseCase
     ): void
     {
         $planPrice = $plan['price'];
+
+        if (!$activeContract) {
+            Payment::create([
+                'contract_id' => $contractId,
+                'price_contracted' => $planPrice,
+                'balance' => 0,
+                'price_paid' => $pricePaid,
+                'type_invoice' => $typeInvoice,
+                'type_payment' => $typePayment,
+                'status' => PaymentStatusEnum::PAID
+            ]);
+            return;
+        }
+
         $outstandingBalance = $this->getOutstandingBalance($planPrice);
 
-        if ($planPrice > $contract['price']) {
+        if ($planPrice > $activeContract['price']) {
             Payment::create([
                 'contract_id' => $contractId,
                 'price_contracted' => $planPrice,
@@ -37,7 +51,7 @@ class PaymentUseCase
             return;
         }
 
-        if ($planPrice < $contract['price']) {
+        if ($planPrice < $activeContract['price']) {
             Payment::create([
                 'contract_id' => $contractId,
                 'price_contracted' => $planPrice,
@@ -49,15 +63,5 @@ class PaymentUseCase
             ]);
             return;
         }
-
-        Payment::create([
-            'contract_id' => $contractId,
-            'price_contracted' => $planPrice,
-            'balance' => 0,
-            'price_paid' => $pricePaid,
-            'type_invoice' => $typeInvoice,
-            'type_payment' => $typePayment,
-            'status' => PaymentStatusEnum::PAID
-        ]);
     }
 }

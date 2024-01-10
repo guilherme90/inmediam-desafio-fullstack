@@ -17,6 +17,7 @@ class HirePlanTest extends TestCase
         $response = $this->post(static::PATH, [
             'user_id' => 1,
             'plan_id' => 8,
+            'price' => 0,
             'type_invoice' => 'debit',
             'type_payment' => 'pix',
             'status' => 'paid'
@@ -37,6 +38,7 @@ class HirePlanTest extends TestCase
         $response = $this->post(static::PATH, [
             'user_id' => 1,
             'plan_id' => 2,
+            'price' => 87,
             'type_invoice' => 'debit',
             'type_payment' => 'pix',
             'status' => 'paid'
