@@ -7,7 +7,6 @@ use App\Domain\UseCases\PaymentUseCase;
 use App\Domain\UseCases\PlanUseCase;
 use App\Http\Controllers\Requests\HirePlanRequest;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class HirePlanController extends Controller
@@ -32,7 +31,7 @@ class HirePlanController extends Controller
         } catch (HttpException $e) {
             return \response()->json([
                 'message' => $e->getMessage()
-            ], $e->getCode() ?? 400);
+            ], $e->getStatusCode());
         } catch (\Exception $e) {
             return \response()->json([
                 'message' => $e->getMessage()
