@@ -59,9 +59,8 @@ class PaymentUseCase
                 'price_paid' => $planPrice,
                 'type_invoice' => 'credit',
                 'type_payment' => $typePayment,
-                'status' => PaymentStatusEnum::PAID
+                'status' => PaymentStatusEnum::PENDING
             ]);
-            return;
         }
     }
 }

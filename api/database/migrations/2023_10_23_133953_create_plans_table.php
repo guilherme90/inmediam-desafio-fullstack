@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
             $table->string('description');
-            $table->integer('numberOfClients');
-            $table->integer('gigabytesStorage');
+            $table->integer('number_of_clients');
+            $table->integer('gigabytes_storage');
             $table->decimal('price', 13, 2);
             $table->boolean('active')->default(true);
             $table->timestamps();

@@ -17,34 +17,34 @@ class PlanSeeder extends Seeder
         $plans = [
             [
                 'description' => 'Individual',
-                'numberOfClients' => 1,
+                'number_of_clients' => 1,
                 'price' => 9.90,
-                'gigabytesStorage' => 1,
+                'gigabytes_storage' => 1,
             ], [
                 'description' => 'Até 10 vistorias / clientes ativos',
-                'numberOfClients' => 10,
+                'number_of_clients' => 10,
                 'price' => 87.00,
-                'gigabytesStorage' => 10,
+                'gigabytes_storage' => 10,
             ], [
                 'description' => 'Até 25 vistorias / clientes ativos',
-                'numberOfClients' => 25,
+                'number_of_clients' => 25,
                 'price' => 197.00,
-                'gigabytesStorage' => 25,
+                'gigabytes_storage' => 25,
             ], [
                 'description' => 'Até 50 vistorias / clientes ativos',
-                'numberOfClients' => 50,
+                'number_of_clients' => 50,
                 'price' => 347.00,
-                'gigabytesStorage' => 50,
+                'gigabytes_storage' => 50,
             ], [
                 'description' => 'Até 100 vistorias / clientes ativos',
-                'numberOfClients' => 100,
+                'number_of_clients' => 100,
                 'price' => 497.00,
-                'gigabytesStorage' => 100,
+                'gigabytes_storage' => 100,
             ], [
                 'description' => 'Até 250 vistorias / clientes ativos',
-                'numberOfClients' => 250,
+                'number_of_clients' => 250,
                 'price' => 797.00,
-                'gigabytesStorage' => 25,
+                'gigabytes_storage' => 25,
             ]
         ];
 

@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\PlanController;
-use App\Http\Controllers\HirePlanController;
+use App\Http\Controllers\ContractPlanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +24,16 @@ Route::get('/', function () {
     return response()->json(['message' => 'ok']);
 });
 
-Route::apiResource('plans', PlanController::class, ['only' => 'index']);
-Route::apiResource('plans/hire-plan', HirePlanController::class, ['only' => 'store']);
-Route::apiSingleton('user', UserController::class, ['only' => 'show']);
+Route::prefix('plans')->group(function () {
+    Route::get('/', [PlanController::class, 'index']);
+
+    Route::prefix('contracts')->group(function () {
+        Route::post('/', [ContractPlanController::class, 'store']);
+        Route::put('/', [ContractPlanController::class, 'update']);
+        Route::get('/{userId}/pending', [ContractPlanController::class, 'show'])->whereNumber('userId');
+    });
+});
+
+Route::prefix('users')->group(function () {
+    Route::get('/{id}', [UserController::class, 'show']);
+});

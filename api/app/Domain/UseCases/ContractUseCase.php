@@ -24,9 +24,4 @@ class ContractUseCase
             'price' => $plan['price']
         ]);
     }
-
-    public function getActiveContract(int $userId): Contract | null
-    {
-        return Contract::where('user_id', '=', $userId)->where('active', '=', true)->first();
-    }
 }
