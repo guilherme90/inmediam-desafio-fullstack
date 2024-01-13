@@ -11,8 +11,6 @@ services:
       - "POSTGRES_PASSWORD=password"
     volumes:
       - db:/var/lib/postgresql/data
-    networks:
-      - db-network
 
   inmediam_db_testing:
     image: "postgres"
@@ -26,13 +24,7 @@ services:
       - "POSTGRES_PASSWORD=password"
     volumes:
       - db:/var/lib/postgresql_testing/data
-    networks:
-      - db-network
 
 volumes:
   db:
     driver: local
-
-networks:
-  db-network:
-    driver: bridge
