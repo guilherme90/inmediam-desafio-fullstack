@@ -7,8 +7,13 @@ use App\Domain\Models\Plan;
 
 class ContractUseCase
 {
+    public function __construct(private readonly UserUseCase $userUseCase)
+    {
+    }
+
     public function createContract(int $userId, Plan $plan): Contract
     {
+        $this->userUseCase->getUser($userId);
         $hasActiveContract = Contract::isActive($userId)->first();
 
         if ($hasActiveContract) {

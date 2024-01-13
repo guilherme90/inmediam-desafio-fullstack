@@ -26,7 +26,7 @@ Route::get('/', function () {
 
 Route::prefix('plans')->group(function () {
     Route::get('/', [PlanController::class, 'index']);
-    Route::get('/{id}', [PlanController::class, 'show']);
+    Route::get('/{id}', [PlanController::class, 'show'])->whereNumber('id');
 
     Route::prefix('contracts')->group(function () {
         Route::post('/', [ContractPlanController::class, 'store']);
@@ -36,5 +36,5 @@ Route::prefix('plans')->group(function () {
 });
 
 Route::prefix('users')->group(function () {
-    Route::get('/{id}', [UserController::class, 'show']);
+    Route::get('/{id}', [UserController::class, 'show'])->whereNumber('id');
 });

@@ -14,7 +14,8 @@ class ContractPlanUseCase
     public function __construct(
         private readonly ContractUseCase $contractUseCase,
         private readonly PaymentUseCase $paymentUseCase,
-        private readonly PlanUseCase $planUseCase
+        private readonly PlanUseCase $planUseCase,
+        private readonly UserUseCase $userUseCase
     )
     {}
 
@@ -26,6 +27,7 @@ class ContractPlanUseCase
         string $typePayment
     ): void
     {
+        $this->userUseCase->getUser($userId);
         $activeContract = Contract::isActive($userId)->first();
         $plan = $this->planUseCase->getById($planId);
 
@@ -42,6 +44,7 @@ class ContractPlanUseCase
 
     public function pay(int $userId, int $contractId): void
     {
+        $this->userUseCase->getUser($userId);
         $activeContract = Contract::isActive($userId)->first();
 
         if (!$activeContract) {
@@ -67,6 +70,7 @@ class ContractPlanUseCase
 
     public function getActiveContract(int $userId)
     {
+        $this->userUseCase->getUser($userId);
         $activeContract = Contract::isActive($userId)
             ->with([
                 'payments' => function ($query) {

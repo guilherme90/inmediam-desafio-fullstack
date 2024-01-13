@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Requests;
 
-use App\Modules\User\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class HirePlanRequest extends FormRequest
@@ -25,11 +24,11 @@ class HirePlanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => ['required', 'present', 'min:1'],
-            'plan_id' => ['required', 'present', 'min:1' ],
+            'user_id' => ['required', 'present', 'integer'],
+            'plan_id' => ['required', 'present', 'integer'],
             'price' => ['required', 'present'],
-            'type_invoice' => ['required', 'present', ],
-            'type_payment' => ['required', 'present', ]
+            'type_invoice' => ['required', 'present', 'in:debit,credit'],
+            'type_payment' => ['required', 'present', 'in:pix,credit_card,billet']
         ];
     }
 
@@ -37,7 +36,9 @@ class HirePlanRequest extends FormRequest
     {
         return [
             'user_id.required' => 'Informe o usuário contratante',
+            'user_id.integer' => 'Usuário inválido',
             'plan_id.required' => 'Informe o plano',
+            'plan_id.integer' => 'Plano inválido',
             'price.required' => 'Informe o valor',
             'type_invoice.required' => 'Informe o tipo de transação, crédito ou débito',
             'type_payment.required' => 'Informe qual o tipo de pagamento'
