@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Payment extends Model
 {
     protected $fillable = [
-      'contract_id', 'parent_id', 'price_contracted', 'balance', 'price_paid', 'type_invoice', 'type_payment', 'status'
+      'contract_id', 'price_contracted', 'balance', 'price_paid', 'type_invoice', 'type_payment', 'status'
     ];
 
     protected $hidden = [

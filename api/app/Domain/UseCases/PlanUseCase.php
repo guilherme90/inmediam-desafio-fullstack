@@ -7,15 +7,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PlanUseCase
 {
-    public function __construct(private readonly Plan $plan)
-    {
-    }
-
     public function getById(int $id): Plan
     {
-        $plan = $this->plan->newQuery()
-            ->select(['id', 'price'])
-            ->where('id', '=', $id)
+        $plan = Plan::where('id', '=', $id)
             ->where('active', '=', true)
             ->first();
 
@@ -24,5 +18,10 @@ class PlanUseCase
         }
 
         return $plan;
+    }
+
+    public function getAll()
+    {
+        return Plan::where('active', true)->get();
     }
 }

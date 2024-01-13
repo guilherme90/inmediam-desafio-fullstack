@@ -3,8 +3,10 @@
 namespace App\Domain\UseCases;
 
 use App\Domain\Enums\PaymentStatusEnum;
+use App\Domain\Enums\TypePaymentEnum;
 use App\Domain\Models\Contract;
 use App\Domain\Models\Payment;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ContractPlanUseCase
@@ -51,23 +53,27 @@ class ContractPlanUseCase
             ->where('status',PaymentStatusEnum::PENDING)
             ->first();
 
-        Payment::create([
-            'parent_id' => $paymentPending['id'],
-            'contract_id' => $contractId,
-            'price_contracted' => $paymentPending['price_contracted'],
-            'balance' => 0,
-            'price_paid' => abs($paymentPending['balance']),
-            'type_invoice' => 'debit',
-            'type_payment' => 'pix',
-            'status' => PaymentStatusEnum::PAID
-        ]);
+        if (!$paymentPending) {
+            throw new HttpException(404, 'Contrato não encontrado');
+        }
+
+        $paymentPending->price_paid = abs($paymentPending['balance']);
+        $paymentPending->balance = 0;
+        $paymentPending->type_payment = TypePaymentEnum::PIX;
+        $paymentPending->status = PaymentStatusEnum::PAID;
+        $paymentPending->updated_at = now();
+        $paymentPending->save();
     }
 
-    public function getPaymentPending(int $userId)
+    public function getActiveContract(int $userId)
     {
         $activeContract = Contract::isActive($userId)
             ->with([
-                'payments:id,contract_id,price_contracted,balance,type_invoice,type_payment',
+                'payments' => function ($query) {
+                    $query
+                        ->select('id' ,'contract_id', 'price_contracted' , 'balance', 'type_invoice', 'type_payment', 'status')
+                        ->where('status', PaymentStatusEnum::PENDING);
+                },
                 'plan:id,description,number_of_clients,gigabytes_storage,price'
             ])
             ->select(['id', 'plan_id', 'price', 'hiring_date'])
