@@ -47,7 +47,7 @@ class ContractPlanController extends Controller
 
             $this->contractPlanUseCase->pay($input['user_id'], $input['contract_id']);
 
-            return \response()->json([], 201);
+            return \response()->json([]);
         } catch (HttpException $e) {
             return \response()->json([
                 'message' => $e->getMessage()
@@ -62,7 +62,7 @@ class ContractPlanController extends Controller
     public function show(int $userId): JsonResponse
     {
         try {
-            $payment = $this->contractPlanUseCase->getPaymentPending($userId);
+            $payment = $this->contractPlanUseCase->getActiveContract($userId);
 
             return \response()->json($payment);
         } catch (HttpException $e) {

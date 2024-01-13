@@ -26,11 +26,12 @@ Route::get('/', function () {
 
 Route::prefix('plans')->group(function () {
     Route::get('/', [PlanController::class, 'index']);
+    Route::get('/{id}', [PlanController::class, 'show']);
 
     Route::prefix('contracts')->group(function () {
         Route::post('/', [ContractPlanController::class, 'store']);
         Route::put('/', [ContractPlanController::class, 'update']);
-        Route::get('/{userId}/pending', [ContractPlanController::class, 'show'])->whereNumber('userId');
+        Route::get('/{userId}', [ContractPlanController::class, 'show'])->whereNumber('userId');
     });
 });
 

@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_id');
-            $table->bigInteger('parent_id')->nullable();
             $table->decimal('price_contracted', 13, 2);
             $table->decimal('balance', 13, 2, true);
             $table->decimal('price_paid', 13, 2);

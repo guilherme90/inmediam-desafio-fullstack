@@ -7,7 +7,7 @@ class HirePlanTest extends TestCase
 {
     use RefreshDatabase;
 
-    const PATH = '/api/plans/hire-plan';
+    const PATH = '/api/plans/contracts';
 
     /**
      * @test
@@ -19,8 +19,7 @@ class HirePlanTest extends TestCase
             'plan_id' => 8,
             'price' => 0,
             'type_invoice' => 'debit',
-            'type_payment' => 'pix',
-            'status' => 'paid'
+            'type_payment' => 'pix'
         ]);
 
         $response
@@ -40,8 +39,7 @@ class HirePlanTest extends TestCase
             'plan_id' => 2,
             'price' => 87,
             'type_invoice' => 'debit',
-            'type_payment' => 'pix',
-            'status' => 'paid'
+            'type_payment' => 'pix'
         ]);
 
         $response

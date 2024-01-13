@@ -21,7 +21,7 @@ class Contract extends Model
 
     public function scopeIsActive(Builder $query, int $userId): void
     {
-        $query->where('user_id', $userId)->where('active', 1);
+        $query->where('user_id', $userId)->where('active', true);
     }
 
     public function payments(): HasMany
