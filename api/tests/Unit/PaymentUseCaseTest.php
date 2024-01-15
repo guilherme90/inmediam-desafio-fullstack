@@ -9,6 +9,7 @@ use App\Domain\UseCases\ContractUseCase;
 use App\Domain\UseCases\ContractPlanUseCase;
 use App\Domain\UseCases\PaymentUseCase;
 use App\Domain\UseCases\PlanUseCase;
+use App\Domain\UseCases\UserUseCase;
 use App\Traits\CalculateBalanceTrait;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -26,10 +27,12 @@ class PaymentUseCaseTest extends TestCase
 
     private function gwtHirePlanUseCase(): ContractPlanUseCase
     {
+        $userUseCase = new UserUseCase();
         return new ContractPlanUseCase(
-            new ContractUseCase(),
+            new ContractUseCase($userUseCase),
             new PaymentUseCase(),
-            new PlanUseCase()
+            new PlanUseCase(),
+            $userUseCase
         );
     }
 
