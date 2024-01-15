@@ -48,4 +48,21 @@ class HirePlanTest extends TestCase
                 'message' => 'Plano contratado com sucesso'
             ]);
     }
+
+    public function userNotFound(): void
+    {
+        $response = $this->post(static::PATH, [
+            'user_id' => 3,
+            'plan_id' => 2,
+            'price' => 87,
+            'type_invoice' => 'debit',
+            'type_payment' => 'pix'
+        ]);
+
+        $response
+            ->assertNotFound()
+            ->assertJson([
+                'message' => 'Usuário não encontrado'
+            ]);
+    }
 }

@@ -4,7 +4,6 @@ namespace Tests\Unit;
 
 use App\Domain\Models\Contract;
 use App\Domain\Models\Payment;
-use App\Domain\Models\Plan;
 use App\Domain\UseCases\ContractUseCase;
 use App\Domain\UseCases\ContractPlanUseCase;
 use App\Domain\UseCases\PaymentUseCase;
@@ -12,9 +11,10 @@ use App\Domain\UseCases\PlanUseCase;
 use App\Domain\UseCases\UserUseCase;
 use App\Traits\CalculateBalanceTrait;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Tests\TestCase;
 
-class PaymentUseCaseTest extends TestCase
+class ContractPlanUseCaseTest extends TestCase
 {
     use RefreshDatabase;
     use CalculateBalanceTrait;
@@ -25,7 +25,7 @@ class PaymentUseCaseTest extends TestCase
     private PlanUseCase $planUseCase;
     private ContractPlanUseCase $hirePlanUseCase;
 
-    private function gwtHirePlanUseCase(): ContractPlanUseCase
+    private function gwtContractPlanUseCase(): ContractPlanUseCase
     {
         $userUseCase = new UserUseCase();
         return new ContractPlanUseCase(
@@ -36,25 +36,53 @@ class PaymentUseCaseTest extends TestCase
         );
     }
 
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function test_example()
-    {
-        $this->assertTrue(true);
-    }
-
     private function createPayment(int $planId, float $pricePaid): void
     {
-        $this->gwtHirePlanUseCase()->process(
+        $this->gwtContractPlanUseCase()->process(
             $this->userId,
             $planId,
             $pricePaid,
             'debit',
             'pix'
         );
+    }
+
+    /**
+     * @test
+     */
+    public function userNotFound(): void
+    {
+        try {
+            $this->gwtContractPlanUseCase()->process(
+                3,
+                2,
+                87,
+                'debit',
+                'pix'
+            );
+        } catch (HttpException $e) {
+            $this->assertSame(404, $e->getStatusCode());
+            $this->assertSame('Usuário não encontrado', $e->getMessage());
+        }
+    }
+
+    /**
+     * @test
+     */
+    public function planNotFound(): void
+    {
+        try {
+            $this->gwtContractPlanUseCase()->process(
+                1,
+                0,
+                87,
+                'debit',
+                'pix'
+            );
+        } catch (HttpException $e) {
+            $this->assertSame(404, $e->getStatusCode());
+            $this->assertSame('Plano não encontrado', $e->getMessage());
+        }
     }
 
     /**
