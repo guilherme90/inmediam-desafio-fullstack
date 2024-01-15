@@ -3,11 +3,12 @@ import { useGetPlan } from '@/hooks/usePlans.ts'
 import { useGetContract } from '@/hooks/useContracts.ts'
 import { useState } from 'react'
 import { post } from '@/utils/http.ts'
+import { Spinner } from '@/components/Spinner/Spinner.tsx'
 
 export const Plan = (): JSX.Element => {
   const { id } = useParams()
   const plan = useGetPlan(id)
-  const contract = useGetContract(1)
+  const { contract, contractLoading } = useGetContract(1)
   const navigate = useNavigate()
   const [hirePlanLoading, setHirePlanLoading] = useState<boolean>(false)
 
@@ -31,7 +32,9 @@ export const Plan = (): JSX.Element => {
   }
 
   return (
-    <div>
+    <>
+      <Spinner loading={contractLoading} />
+
       {contract && (
         <div className="grid justify-center">
           <header>
@@ -89,6 +92,6 @@ export const Plan = (): JSX.Element => {
       )}
 
 
-    </div>
+    </>
   )
 }

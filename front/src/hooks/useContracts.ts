@@ -19,17 +19,20 @@ export interface IContract {
   plan: IPlan
 }
 
-export function useGetContract (userId: number) : IContract | null {
+export function useGetContract (userId: number) : { contract: IContract | null, contractLoading: boolean } {
+  const [contractLoading, setContractLoading] = useState<boolean>(false)
   const [contract, setContract] = useState<IContract | null>(null)
 
   useEffect(() => {
+    setContractLoading(true)
     const request = async () => {
       const response = await get<IContract>(`/plans/contracts/${userId}`) as IContract
       setContract(response)
+      setContractLoading(false)
     }
 
     request()
   }, [])
 
-  return contract
+  return { contract, contractLoading }
 }

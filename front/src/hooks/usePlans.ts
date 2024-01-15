@@ -9,19 +9,22 @@ export interface IPlan {
   price: number;
 }
 
-export function useListPlans (): IPlan[] {
+export function useListPlans (): { plans: IPlan[], plansLoading: boolean } {
+  const [plansLoading, setPlansLoading] = useState<boolean>(false)
   const [plans, setPlans] = useState<IPlan[]>([])
 
   useEffect(() => {
+    setPlansLoading(true)
     const request = async () => {
       const response = await get<IPlan[]>('/plans') as IPlan[]
       setPlans(response)
+      setPlansLoading(false)
     }
 
     request()
   }, [])
 
-  return plans
+  return { plans, plansLoading }
 }
 
 export function useGetPlan(id?: string): IPlan | null {
